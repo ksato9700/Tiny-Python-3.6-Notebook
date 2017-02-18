@@ -63,7 +63,7 @@ REPL(‘Î˜b“I•]‰¿ŠÂ‹«)
 The Zen of Python
 ===================
 
-Run the following in an interpreter to get an easter egg that describes some of the ethos behind Python. This is also codified in PEP 20::
+Run the following in an interpreter to get an Easter egg that describes some of the ethos behind Python. This is also codified in PEP 20::
 
     >>> import this
     The Zen of Python, by Tim Peters
@@ -519,6 +519,7 @@ must be hashable, but values can be any object::
   ``d.pop(key, [default])``                                         Return value for key or default (``KeyError`` if not set)
   ``d.popitem()``                                                   Return arbitrary (key, value) tuple. ``KeyError`` if empty
   ``d.setdefault(k,   [default])``                                  Does ``d.get(k, default)``. If ``k`` missing, sets to default
+  ``d.update(d2)``                                                  Mutate ``d`` with values of ``d2`` (dictionary or iterable of (key, value) pairs)
   ``d.values()``                                                    View of values
   ================================================================= ============================================================
 
@@ -660,7 +661,7 @@ Sets are useful because they provide *set operations*, such as union
   ``s >= s2``                             ``__ge__``                ``s`` in ``s2`` (see ``.issuperset``)
   ``s > s2``                              ``__gt__``                Greater. Always ``False```
   No hash                                 ``__hash__``              Set to ``None`` to ensure you can't insert in dictionary
-  ``s &= s2``                             ``__iand__``              Augmented (mutates ``s``) intersection (see ``.intersection_udpate``)
+  ``s &= s2``                             ``__iand__``              Augmented (mutates ``s``) intersection (see ``.intersection_update``)
   ``s |= s2``                             ``__ior__``               Augmented (mutates ``s``) union (see ``.update``)
   ``s -= s2``                             ``__isub__``              Augmented (mutates ``s``) difference (see ``.difference_update``)
   ``for thing in s:``                     ``__iter__``              Iteration
@@ -690,7 +691,7 @@ Sets are useful because they provide *set operations*, such as union
 
 ..  longtable: format: {p{.55\textwidth} p{.35\textwidth}}
 
-..  longtable: format: {>{\hangindent=1em\hangafter=1\arraybackslash }p{.55\textwidth}  >{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.35\textwidth}}
+..  longtable: format: {>{\hangindent=1em\hangafter=1\arraybackslash }p{.6\textwidth}  >{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.30\textwidth}}
 
 .. table:: Set Methods
   
@@ -1271,6 +1272,7 @@ can use the built-in data structures to great effect. Here's a class for a simpl
   ...         return self.ratio * self.size
 
 
+
 We can call the constructor (``__init__``), by invoking the class name. Note that ``self`` is the instance,
 but Python passes that around for us automatically::
 
@@ -1278,7 +1280,7 @@ but Python passes that around for us automatically::
   >>> print(bike.gear_inches())
   68.0
 
-We can access both class attributes or instance attributes on the instance::
+We can access both class attributes and instance attributes on the instance::
 
   >>> bike.num_passengers
   1
@@ -2070,10 +2072,10 @@ If we were writing a Python module to write TeX, we might do something like this
 the environments are closed properly::
 
   >>> def start(env):
-  ...     return '\begin{}'.format(env)
+  ...     return '\\begin{{{}}}'.format(env)
 
   >>> def end(env):
-  ...      return '\end{}'.format(env)
+  ...      return '\\end{{{}}}'.format(env)
 
   >>> def may_error():
   ...     import random
@@ -2098,18 +2100,18 @@ Function Based Context Managers
 -------------------------------
 
 To create a context manager with a function, decorate with
-``contextlib.contextmanager``, and yield where you want to bookend::
+``contextlib.contextmanager``, and yield where you want to insert your block::
 
   >>> import contextlib
   >>> @contextlib.contextmanager
   ... def env(name, content):
-  ...     content.append(r'\begin{}'.format(name))
+  ...     content.append('\\begin{{{}}}'.format(name))
   ...     try:
   ...         yield
   ...     except ValueError:
   ...         pass
   ...     finally:
-  ...         content.append(r'\end{}'.format(name))
+  ...         content.append('\\end{{{}}}'.format(name))
 
 Our code looks better now, and there will always be a closing tag::
 
@@ -2118,7 +2120,7 @@ Our code looks better now, and there will always be a closing tag::
   ...     out.append(may_error())
 
   >>> out
-  ['\\begincenter', 'content', '\\endcenter']
+  ['\\begin{center}', 'content', '\\end{center}']
 
 Class Based Context Managers
 ----------------------------
@@ -2131,14 +2133,14 @@ To create a class based context manager, implement the ``__enter__`` and ``__exi
   ...         self.content = content
   ...
   ...     def __enter__(self):
-  ...         self.content.append(r'\begin{}'.format(
+  ...         self.content.append('\\begin{{{}}}'.format(
   ...             self.name))
   ...
   ...     def __exit__(self, type, value, tb):
   ...         # if error in block, t, v, & tb
   ...         # have non None values
   ...         # return True to hide exception
-  ...         self.content.append(r'\end{}'.format(
+  ...         self.content.append('\\end{{{}}}'.format(
   ...             self.name))
   ...         return True
 
@@ -2149,7 +2151,7 @@ The code looks the same as using the function based context manager::
   ...     out.append(may_error())
 
   >>> out  # may_error had an issue
-  ['\\begincenter', '\\endcenter']
+  ['\\begin{center}', '\\end{center}']
 
 
 Context objects
