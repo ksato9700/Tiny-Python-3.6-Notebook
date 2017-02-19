@@ -120,46 +120,40 @@ Pythonの極意
     逆に説明が簡単であれば、それは多分良い設計だ。
     名前空間ってすんげーいい考えだよ。もっと使って行こうよ。
 
-これらはお馬鹿な標語集みたいに見えるけど、実は多くの知恵がここに盛り込まれています。Pythonのプログラマーは時折これを眺めて自分のコードに照らし合わせてみると良いでしょう(あるいはコードレビューの時に拠り所として使っても良いでしょう)。
+これらはお馬鹿な標語集みたいに見えますが、実は多くの知恵がここに盛り込まれています。Pythonのプログラマーは時折これを眺めて自分のコードに照らし合わせてみると良いでしょう(あるいはコードレビューの時に拠り所として使っても良いでしょう)。
 
-Built-in Types
-===============
+組み込み型
+==========
 
-Variables
----------
+変数
+----
 
-Python variables are like cattle tags, they point to objects (which can be
-classes, instances, modules, or functions), but variables are not the objects. You can
-reuse variable names for different object types (though you probably shouldn't)::
+Pythonの変数は牛の耳につけているタグみたいなもので、オブジェクト(それはクラスだったり、インスタンスだったり、モジュールだったり、関数だったりする)を指し示していますが、変数そのものはオブジェクトではありません。変数名は再利用可能で、違った型のオブジェクトを指し示すこともできます(まぁすべきじゃないと思いますが)。::
 
-   >>> a = 400     # a points to an integer
-   >>> a = '400'   # a now points to a string
+   >>> a = 400     # 整数へのポインター
+   >>> a = '400'   # が、こんどは文字列へのポインタへ
 
 
 .. note::
 
-   The ``#`` character denotes the start of a comment. There are no multi-line comments, though
-   most editors with Python support can comment out a region.
+   ``#`` 文字はコメントの開始を示します。複数行のコメントというのはありませんが、Pythonをサポートするほとんどのテキストエディタは領域をまとめてコメントアウトすることができます。
 
-The figure that follows illustrates how everything is an object in Python and variables just point to them.
+以下の図では、Pythonで色々なものがオブジェクトであることと、変数はそれらを単に指し示すだけのものであることを示しています。
 
 
-.. figure:: img/py/rebind.png
+.. figure:: img/py/rebind_ja.png
 
-   Illustration of reusing the same variable 
+   図: 変数の再利用
 
 .. raw:: latex
 
    %\Needspace{5\baselineskip}
    \clearpage
 
-Numbers
------------
+数値型
+------
 
-Python includes three types of numeric literals:
-*integers*, *floats*, and *complex numbers*.
-Python 3.6 adds the ability to use underscores to
-improve readability (PEP 515).
+Pythonには3つの型の数値リテラルがあります。 *整数*、*浮動小数点数*、そして *複素数* です。Python 3.6では、アンダースコアを使って読みやすくすることができるようになりました(PEP 515)。
 
 .. raw:: latex
 
@@ -167,98 +161,95 @@ improve readability (PEP 515).
 
 ..  longtable: format: {r l}
 
-.. table:: Number types
+.. table:: 数値型
 
   
   ================ ===========================
-  Type             Example
+  型               例
   ================ ===========================
-  Integer          ``14``
-  Integer (Hex)    ``0xe``
-  Integer (Octal)  ``0o16``
-  Integer (Binary) ``0b1110``
-  Float            ``14.0``
-  Float            ``1.4e1``
-  Complex          ``14+0j``
-  Underscore       ``1_000``
+  整数             ``14``
+  整数 (16進数)    ``0xe``
+  整数 (8進数)     ``0o16``
+  整数 (2進数)     ``0b1110``
+  浮動小数点数     ``14.0``
+  浮動小数点数     ``1.4e1``
+  複素数           ``14+0j``
+  アンダースコア   ``1_000``
   ================ ===========================
 
-There are many built-in functions for manipulating
-numbers ie. ``abs``, ``min``, ``max``, ``ceil``.
-Also see the ``math``, ``random``, and ``statistics`` modules in
-the standard library.
+多くの組み込み関数が数値を扱います。例えば ``abs``, ``min``, ``max``, ``ceil`` など。また、 ``math``, ``random``, ``statistics`` など標準ライブラリに含まれるモジュールを見ると良いでしょう。
 
 
 ..  longtable: format: {p{.3\textwidth} l >{\raggedright\arraybackslash}p{.3\textwidth}}
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1 }p{.3\textwidth} l >{\hangindent=1em\hangafter=1 }p{.3\textwidth}}
 
-.. table:: Number magic methods
+.. table:: 数値型の特殊メソッド
   
   ====================== ================== =====================================
-  Operation              Provided By        Result
+  操作                   提供するメソッド   結果
   ====================== ================== =====================================
-  ``abs(num)``           ``__abs__``        Absolute value of ``num``
-  ``num + num2``         ``__add__``        Addition
-  ``bool(num)``          ``__bool__``       Boolean conversion
-  ``num == num2``        ``__eq__``         Equality
-  ``float(num)``         ``__float__``      Float conversion
-  ``num // num2``        ``__floordiv__``   Integer division
-  ``num >= num2``        ``__ge__``         Greater or equal
-  ``num > num2``         ``__gt__``         Greater than
-  ``int(num)``           ``__int__``        Integer conversion
-  ``num <= num2``        ``__le__``         Less or equal
-  ``num < num2``         ``__lt__``         Less than
-  ``num % num2``         ``__mod__``        Modulus
-  ``num * num2``         ``__mul__``        Multiplication
-  ``num != num2``        ``__ne__``         Not equal
-  ``-num``               ``__neg__``        Negative
-  ``+num``               ``__pos__``        Positive
-  ``num ** num2``        ``__pow__``        Power
-  ``round(num)``         ``__round__``      Round
-  ``num.__sizeof__()``   ``__sizeof__``     Bytes for internal representation
-  ``str(num)``           ``__str__``        String conversion
-  ``num - num2``         ``__sub__``        Subtraction
-  ``num / num2``         ``__truediv__``    Float division
-  ``math.trunc(num)``    ``__trunc__``      Truncation
+  ``abs(num)``           ``__abs__``        ``num`` の絶対値
+  ``num + num2``         ``__add__``        加算
+  ``bool(num)``          ``__bool__``       ブール値への変換
+  ``num == num2``        ``__eq__``         等しい
+  ``float(num)``         ``__float__``      浮動小数点数への変換
+  ``num // num2``        ``__floordiv__``   整数除算
+  ``num >= num2``        ``__ge__``         以上
+  ``num > num2``         ``__gt__``         より大きい
+  ``int(num)``           ``__int__``        整数への変換
+  ``num <= num2``        ``__le__``         以下
+  ``num < num2``         ``__lt__``         未満
+  ``num % num2``         ``__mod__``        剰余
+  ``num * num2``         ``__mul__``        乗算
+  ``num != num2``        ``__ne__``         等しくない
+  ``-num``               ``__neg__``        負の値
+  ``+num``               ``__pos__``        正の値
+  ``num ** num2``        ``__pow__``        べき乗
+  ``round(num)``         ``__round__``      四捨五入
+  ``num.__sizeof__()``   ``__sizeof__``     内部表現のバイト数
+  ``str(num)``           ``__str__``        文字列への変換
+  ``num - num2``         ``__sub__``        減算
+  ``num / num2``         ``__truediv__``    浮動小数点除算
+  ``math.trunc(num)``    ``__trunc__``      切り捨て
   ====================== ================== =====================================
 
 
 ..  longtable: format: {p{.3\textwidth} l >{\raggedright\arraybackslash}p{.3\textwidth}}
 
-.. table:: Integer specific methods and operations 
+.. table:: 整数型に特有のメソッドと操作
   
   ==================== ================== =====================================
-  Operation            Provided By        Result
+  操作                 提供するメソッド   結果
   ==================== ================== =====================================
-  ``num & num2``       ``__and__``        Bitwise and
-  ``math.ceil(num)``   ``__ceil__``       Ceiling
-  ``math.floor(num)``  ``__floor__``      Floor
-  ``~num``             ``__invert__``     Bitwise inverse
-  ``num << num2``      ``__lshift__``     Left shift
-  ``num | num2``       ``__or__``         Bitwise or
-  ``num >> num2``      ``__rshift__``     Right shift
-  ``num ^ num2``       ``__xor__``        Bitwise xor
-  ``num.bit_length()`` ``bit_length``     Number of bits necessary
+  ``num & num2``       ``__and__``        ビット単位論理積
+  ``math.ceil(num)``   ``__ceil__``       切り上げ
+  ``math.floor(num)``  ``__floor__``      切り捨て
+  ``~num``             ``__invert__``     ビット単位反転
+  ``num << num2``      ``__lshift__``     左シフト
+  ``num | num2``       ``__or__``         ビット単位論理和
+  ``num >> num2``      ``__rshift__``     右シフト
+  ``num ^ num2``       ``__xor__``        ビット単位排他的論理和
+  ``num.bit_length()`` ``bit_length``     必要とするビット数
   ==================== ================== =====================================
 
 ..  longtable: format: {p{.4\textwidth} p{.5\textwidth}}
 
-.. table:: Float specific methods and operations
-  
-  ================================== ========================
-  Operation                          Result
-  ================================== ========================
-  ``f.as_integer_ratio()``           Returns num, denom tuple
-  ``f.is_integer()``                 Boolean if whole number
-  ================================== ======================== 
+.. table:: 浮動小数点型に特有のメソッドと操作
+
+  ================================== ======================================
+  操作                               結果
+  ================================== ======================================
+  ``f.as_integer_ratio()``           有理数表現を分子、分母の整数ペアで返す
+  ``f.is_integer()``                 整数値であるかどうかをブール値で返す
+  ================================== ======================================
 
 
 
-Strings
------------
+文字列
+------
 
-Python 3 strings hold unicode data. Python has a few ways to represent strings. There is also a bytes type (PEP 3137):
+Python 3の文字列はUnicodeのデータを保持します。Pythonでは幾つか文字列を表現する方法があります。また、バイナリデータを操作するためのBytes型もあります(PEP 3137):。
 
 .. raw:: latex
 
@@ -267,16 +258,16 @@ Python 3 strings hold unicode data. Python has a few ways to represent strings. 
 
 ..  longtable: format: {r l}
 
-.. table:: String types
+.. table:: 文字列型
   
   ================ ===========================
-  Type             Example
+  型               例
   ================ ===========================
-  String           ``"hello\tthere"``
-  String           ``'hello'``
-  String           ``'''He said, "hello"'''``
-  Raw string       ``r'hello\tthere'``
-  Byte string      ``b'hello'``
+  文字列           ``"hello\tthere"``
+  文字列           ``'hello'``
+  文字列           ``'''He said, "hello"'''``
+  Raw文字列        ``r'hello\tthere'``
+  バイト列         ``b'hello'``
   ================ ===========================
 
 
@@ -285,26 +276,26 @@ Python 3 strings hold unicode data. Python has a few ways to represent strings. 
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.3\textwidth} l >{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.3\textwidth}}
 
-.. table:: String operations
+.. table:: 文字列操作
   
   ============================= ========================= ==========================================================
-  Operation                     Provided By               Result
+  操作                          提供するメソッド          結果
   ============================= ========================= ==========================================================
-  ``s + s2``                    ``__add__``               String concatenation
-  ``"foo" in s``                ``__contains__``          Membership
-  ``s == s2``                   ``__eq__``                Equality
-  ``s >= s2``                   ``__ge__``                Greater or equal
-  ``s[0]``                      ``__getitem__``           Index operation
-  ``s > s2``                    ``__gt__``                Greater
-  ``s <= s2``                   ``__le__``                Less than or equal
-  ``len(s)``                    ``__len__``               Length
-  ``s < s2``                    ``__lt__``                Less than
-  ``s % (1, 'foo')``            ``__mod__``               Formatting
-  ``s * 3``                     ``__mul__``               Repetition
-  ``s != s2``                   ``__ne__``                Not equal
-  ``repr(s)``                   ``__repr__``              Programmer friendly string
-  ``s.__sizeof__()``            ``__sizeof__``            Bytes for internal representation
-  ``str(s)``                    ``__str__``               User friendly string
+  ``s + s2``                    ``__add__``               文字列連結
+  ``"foo" in s``                ``__contains__``          含む
+  ``s == s2``                   ``__eq__``                等しい
+  ``s >= s2``                   ``__ge__``                以上
+  ``s[0]``                      ``__getitem__``           インデックス操作
+  ``s > s2``                    ``__gt__``                より大きい
+  ``s <= s2``                   ``__le__``                以下
+  ``len(s)``                    ``__len__``               文字列の長さ
+  ``s < s2``                    ``__lt__``                未満
+  ``s % (1, 'foo')``            ``__mod__``               書式化操作
+  ``s * 3``                     ``__mul__``               繰り返し
+  ``s != s2``                   ``__ne__``                等しくない
+  ``repr(s)``                   ``__repr__``              プログラマにやさしい文字列表現
+  ``s.__sizeof__()``            ``__sizeof__``            内部表現のバイト数
+  ``str(s)``                    ``__str__``               ユーザにやさしい文字列表現
   ============================= ========================= ==========================================================
 
 
@@ -319,54 +310,54 @@ Python 3 strings hold unicode data. Python has a few ways to represent strings. 
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.3\textwidth} >{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.6\textwidth}}
 
-.. table:: String methods
+.. table:: 文字列のメソッド
 
   ======================================================= ===========================================================
-  Operation                                               Result
+  操作                                                    結果
   ======================================================= ===========================================================
-  ``s.capitalize()``                                      Capitalizes a string
-  ``s.casefold()``                                        Lowercase in a unicode compliant manner
-  ``s.center(w, [char])``                                 Center a string in ``w`` spaces with ``char`` (default ``" "``)
-  ``s.count(sub, [start, [end]])``                        Count ``sub`` in ``s`` between start and end
-  ``s.encode(encoding, errors= 'strict')``                Encode a string into bytes
-  ``s.endswith(sub)``                                     Check for a suffix
-  ``s.expandtabs( tabsize=8)``                            Replaces tabs with spaces
-  ``s.find(sub, [start, [end]])``                         Find substring or return ``-1``
-  ``s.format(*args, **kw)``                               Format string
-  ``s.format_map( mapping)``                               Format strings with a mapping
-  ``s.index(sub, [start, [end]])``                        Find substring or raise ``ValueError``
-  ``s.isalnum()``                                         Boolean if alphanumeric
-  ``s.isalpha()``                                         Boolean if alphabetic
-  ``s.isdecimal()``                                       Boolean if decimal
-  ``s.isdigit()``                                         Boolean if digit
-  ``s.isidentifier()``                                    Boolean if valid identifier
-  ``s.islower()``                                         Boolean if lowercase
-  ``s.isnumeric()``                                       Boolean if numeric
-  ``s.isprintable()``                                     Boolean if printable
-  ``s.isspace()``                                         Boolean if whitespace
-  ``s.istitle()``                                         Boolean if titlecased
-  ``s.isupper()``                                         Boolean if uppercased
-  ``s.join(iterable)``                                    Return a string inserted between sequence
-  ``s.ljust(w, [char])``                                  Left justify in w spaces with ``char`` (default ``' '``)
-  ``s.lower()``                                           Lowercase
-  ``s.lstrip([chars])``                                   Left strip ``chars`` (default spacing).
-  ``s.partition(sub)``                                    Split string at first occurrence of substring, return ``(before, sub, after)``
-  ``s.replace(old, new, [count])``                        Replace substring with new string
-  ``s.rfind(sub, [start, [end]])``                        Find rightmost substring or return ``-1``
-  ``s.rindex(sub, [start, [end]])``                       Find rightmost substring or raise ``ValueError``
-  ``s.rjust(w, [char)``                                   Right justify in w spaces with char (default ``" "``)
-  ``s.rpartition(sub)``                                   Rightmost partition
-  ``s.rsplit([sep, [maxsplit=-1])``                       Rightmost split by sep (defaults to whitespace)
-  ``s.rstrip([chars])``                                   Right strip
-  ``s.split([sep, [maxsplit=-1]])``                       Split a string into sequence around substring
-  ``s.splitlines( keepends=False)``                        Break string at line boundaries
-  ``s.startswith( prefix, [start, [end]])``                Check for prefix
-  ``s.strip([chars])``                                    Remove leading and trailing whitespace (default) or ``chars``
-  ``s.swapcase()``                                        Swap casing of string
-  ``s.title()``                                           Titlecase string
-  ``s.translate(table)``                                  Use a translation table to replace strings
-  ``s.upper()``                                           Uppercase
-  ``s.zfill(width)``                                      Left fill with ``0`` so string fills ``width`` (no truncation)
+  ``s.capitalize()``                                      最初の文字列だけを大文字にした文字列を返す
+  ``s.casefold()``                                        casefold(unicodeで定められた小文字変換)をされた文字列を返す
+  ``s.center(w, [char])``                                 余白を``char`` (デフォルトは ``" "``)で埋められた、``w`` の長さの中央寄せした文字列を返す
+  ``s.count(sub, [start, [end]])``                        ``s`` の ``start`` と ``end`` の間に、文字列 ``sub`` が出現する回数を返す
+  ``s.encode(encoding, errors= 'strict')``                文字列をエンコードしてバイト列で返す
+  ``s.endswith(sub)``                                     文字列が ``sub`` で終るか否かを返す
+  ``s.expandtabs( tabsize=8)``                            タブ文字をスペースで置き換える
+  ``s.find(sub, [start, [end]])``                         部分文字列を探しその最小のインデックスを返す。なければ-1を返す
+  ``s.format(*args, **kw)``                               文字列の書式化操作を行う
+  ``s.format_map(mapping)``                               マッピングを直接与えて書式化操作を行う
+  ``s.index(sub, [start, [end]])``                        部分文字列を探しその最小のインデックスを返す。なければValueErrorを送出する
+  ``s.isalnum()``                                         文字列が英数字のみであるか否かを返す
+  ``s.isalpha()``                                         文字列が英字のみであるか否かを返す
+  ``s.isdecimal()``                                       文字列が十進数字のみであるか否かを返す
+  ``s.isdigit()``                                         文字列が数字のみであるか否かを返す
+  ``s.isidentifier()``                                    文字列が識別子であるか否かを返す
+  ``s.islower()``                                         文字列が小文字のみであるか否かを返す
+  ``s.isnumeric()``                                       文字列が数を表す文字のみであるか否かを返す
+  ``s.isprintable()``                                     文字列が印字可能文字のみであるか否かを返す
+  ``s.isspace()``                                         文字列が空白文字のみであるか否かを返す
+  ``s.istitle()``                                         文字列がタイトルケース文字列であるか否かを返す
+  ``s.isupper()``                                         文字列が大文字のみであるか否かを返す
+  ``s.join(iterable)``                                    与えられたシーケンスの間に文字列を挿入した文字列を返す
+  ``s.ljust(w, [char])``                                  余白を``char`` (デフォルトは ``" "``)で埋められた、``w`` の長さの左揃えした文字列を返す
+  ``s.lower()``                                           小文字に変換した文字列を返す
+  ``s.lstrip([chars])``                                   文字列の先頭の ``chars`` (デフォルトは空白文字) を除去した文字列を返す
+  ``s.partition(sub)``                                    部分文字列の最初の出現位置で区切り、 ``(before, sub, after)`` のタプルを返す
+  ``s.replace(old, new, [count])``                        部分文字列 ``old`` を与えられたもう一つの部分文字列 ``new`` で置き換えた文字列を返す
+  ``s.rfind(sub, [start, [end]])``                        部分文字列を探しその最大のインデックスを返す。なければ-1を返す
+  ``s.rindex(sub, [start, [end]])``                       部分文字列を探しその最大のインデックスを返す。なければValueErrorを送出する
+  ``s.rjust(w, [char)``                                   余白を``char`` (デフォルトは ``" "``)で埋められた、``w`` の長さの右寄せした文字列を返す
+  ``s.rpartition(sub)``                                   部分文字列の最後の出現位置で区切り、 ``(before, sub, after)`` のタプルを返す
+  ``s.rsplit([sep, [maxsplit=-1])``                       ``sep`` (デフォルトは空白文字)で右から区切られた文字列のリストを返す
+  ``s.rstrip([chars])``                                   文字列の終端の ``chars`` (デフォルトは空白文字) を除去した文字列を返す
+  ``s.split([sep, [maxsplit=-1]])``                       ``sep`` (デフォルトは空白文字)で区切られた文字列のリストを返す
+  ``s.splitlines(keepends=False)``                        文字列を改行部分で区切った文字列のリストを返す
+  ``s.startswith(prefix, [start, [end]])``                文字列が ``prefix`` で始まるか否かを返す
+  ``s.strip([chars])``                                    文字列の先頭と終端の ``chars`` (デフォルトは空白文字) を除去した文字列を返す
+  ``s.swapcase()``                                        大文字を小文字に小文字を大文字に変換した文字列を返す
+  ``s.title()``                                           単語ごとに大文字から始まるような文字列に変換して返す
+  ``s.translate(table)``                                  与えられた変換テーブルを用いて文字置換を行った文字列を返す
+  ``s.upper()``                                           大文字に変換した文字列を返す
+  ``s.zfill(width)``                                      長さが ``width`` で ``0`` が左詰めされた文字列を返す
   ======================================================= ===========================================================
 
 
