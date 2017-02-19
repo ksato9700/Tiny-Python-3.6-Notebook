@@ -60,10 +60,11 @@ REPL(対話的評価環境)
   
   この本に出てくるコードのほとんどはREPL環境で実行されたように書かれています。したがって、ご自分で試される際は、``>>>`` や ``...`` などのプロンプトを除いてタイプしてください。
 
-The Zen of Python
-===================
 
-Run the following in an interpreter to get an Easter egg that describes some of the ethos behind Python. This is also codified in PEP 20::
+Pythonの極意
+============
+
+対話環境で次のコマンドを実行すると、隠しメッセージを表示することができます。そこにはPythonの背後にある思想・基本理念が書かれています。そして同じ内容がPEP 20にも記述されています。::
 
     >>> import this
     The Zen of Python, by Tim Peters
@@ -95,10 +96,31 @@ Run the following in an interpreter to get an Easter egg that describes some of 
     Namespaces are one honking great idea -- let's
     do more of those!
 
-These might just seem like silly one liners, but there is a lot of wisdom
-packed in here. It is good for Python programmers to review these
-every once in a while and see if these hold true for their code. (Or to
-justify their code reviews)
+これらを日本語訳するとこのようになります。::
+
+    Pythonの極意 Tim Peters著
+
+    醜いよりも美しい方が良い。
+    暗黙的よりも明示的な方が良い。
+    複雑よりもシンプルな方が良い。
+    混乱しているよりも複雑な方がまだ良いけど。
+    入れ子になっているよりも出来るだけ階層が少ない方が良い。
+    混んでいるよりも空いている方が良い。
+    読みやすさは大切。
+    ルールを破ってまで特別扱いすべき特殊ケースなんてない。
+    でも、純粋性は実用性には勝てないけど。
+    エラーを黙ってやり過したらダメだよ。
+    そうして良いと明示されていれば話は別だけど。
+    曖昧なものを、勝手に推測しちゃわないようにすべき。
+    もの事にはひとつ、できればひとつだけ、の当たり前なやり方がある。
+    まぁオランダ人じゃなけりゃ、それは一見当たり前なやり方に見えないかもだけど。
+    やらないよりも今やった方が良い。
+    とは言え、今「すぐ」やるよりもやらない方が良いこともよくあるけど。
+    実装方法を説明するのが難しければ、それは悪い設計ってこと。
+    逆に説明が簡単であれば、それは多分良い設計だ。
+    名前空間ってすんげーいい考えだよ。もっと使って行こうよ。
+
+これらはお馬鹿な標語集みたいに見えるけど、実は多くの知恵がここに盛り込まれています。Pythonのプログラマーは時折これを眺めて自分のコードに照らし合わせてみると良いでしょう(あるいはコードレビューの時に拠り所として使っても良いでしょう)。
 
 Built-in Types
 ===============
