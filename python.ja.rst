@@ -199,7 +199,7 @@ Pythonには3つの型の数値リテラルがあります。 *整数*、*浮動
   ``num > num2``         ``__gt__``         より大きい
   ``int(num)``           ``__int__``        整数への変換
   ``num <= num2``        ``__le__``         以下
-  ``num < num2``         ``__lt__``         未満
+  ``num < num2``         ``__lt__``         より小さい
   ``num % num2``         ``__mod__``        剰余
   ``num * num2``         ``__mul__``        乗算
   ``num != num2``        ``__ne__``         等しくない
@@ -289,7 +289,7 @@ Python 3の文字列はUnicodeのデータを保持します。Pythonでは幾�
   ``s > s2``                    ``__gt__``                より大きい
   ``s <= s2``                   ``__le__``                以下
   ``len(s)``                    ``__len__``               文字列の長さ
-  ``s < s2``                    ``__lt__``                未満
+  ``s < s2``                    ``__lt__``                より小さい
   ``s % (1, 'foo')``            ``__mod__``               書式化操作
   ``s * 3``                     ``__mul__``               繰り返し
   ``s != s2``                   ``__ne__``                等しくない
@@ -361,20 +361,20 @@ Python 3の文字列はUnicodeのデータを保持します。Pythonでは幾�
   ======================================================= ===========================================================
 
 
-Lists
------
+リスト
+------
 
-Lists are ordered mutable sequences::
+リストは順序付けされた変更可能なシーケンスです::
 
   >>> people = ['Paul', 'John', 'George']
   >>> people.append('Ringo')
 
-The ``in`` operator is useful for checking membership on sequences::
+``in`` オペレータは要素がシーケンスに含まれているかどうかを確認するのに使えます::
 
   >>> 'Yoko' in people
   False
 
-If we need the index number during iteration, the ``enumerate`` function gives us a tuple of index, item pairs::
+シーケンスの繰り返し処理をする時に、もしインデックス番号が必要であれば、``enumerate`` 関数が使えます。これは、インデックスと要素のペアをタプルで返します::
 
   >>> for i, name in enumerate(people, 1):
   ...     print('{} - {}'.format(i, name))
@@ -384,24 +384,25 @@ If we need the index number during iteration, the ``enumerate`` function gives u
   4 - Ringo
 
 
-We can do index operations on most sequences::
+ほとんどのシーケンス型でインデックス操作ができます::
 
   >>> people[0]
   'Paul'
   >>> people[-1]  # len(people) - 1
   'Ringo'
 
-We can also do *slicing* operations on most sequences::
+さらに、ほとんどのシーケンス型で *スライス操作* もできます::
+
 
   >>> people[1:2]
   ['John']
-  >>> people[:1]   # Implcit start at 0
+  >>> people[:1]   # 暗黙的に0から開始
   ['Paul']
-  >>> people[1:]   # Implcit end at len(people)
+  >>> people[1:]   # 暗黙的に len(people) で終了
   ['John', 'George', 'Ringo']
-  >>> people[::2]  # Take every other item
+  >>> people[::2]  # 一つ飛ばしで取る
   ['Paul', 'George']
-  >>> people[::-1] # Reverse sequence
+  >>> people[::-1] # 逆順のシーケンス
   ['Ringo', 'George', 'John', 'Paul']
 
  
@@ -414,65 +415,65 @@ We can also do *slicing* operations on most sequences::
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1 }p{.25\textwidth} l >{\hangindent=1em\hangafter=1 }p{.35\textwidth}}
 
-.. table:: List Operations
+.. table:: リスト操作
   
   ================================== ========================= ============================================================
-  Operation                          Provided By               Result
+  操作                               提供するメソッド          結果
   ================================== ========================= ============================================================
-  ``l + l2``                         ``__add__``               List concatenation (see ``.extend``)
-  ``"name" in l``                    ``__contains__``          Membership
-  ``del l[idx]``                     ``__del__``               Remove item at index ``idx`` (see ``.pop``)
-  ``l == l2``                        ``__eq__``                Equality
-  ``"{}".format(l)``                 ``__format__``            String format of list
-  ``l >= l2``                        ``__ge__``                Greater or equal. Compares items in lists from left
-  ``l[idx]``                         ``__getitem__``           Index operation
-  ``l > l2``                         ``__gt__``                Greater. Compares items in lists from left
-  No hash                            ``__hash__``              Set to ``None`` to ensure you can't insert in dictionary
-  ``l += l2``                        ``__iadd__``              Augmented (mutates ``l``) concatenation
-  ``l *= 3``                         ``__imul__``              Augmented (mutates ``l``) repetition
-  ``for thing in l:``                ``__iter__``              Iteration
-  ``l <= l2``                        ``__le__``                Less than or equal. Compares items in lists from left
-  ``len(l)``                         ``__len__``               Length
-  ``l < l2``                         ``__lt__``                Less than. Compares items in lists from left
-  ``l * 2``                          ``__mul__``               Repetition
-  ``l != l2``                        ``__ne__``                Not equal
-  ``repr(l)``                        ``__repr__``              Programmer friendly string
-  ``reversed(l)``                    ``__reversed__``          Reverse
-  ``foo * l``                        ``__rmul__``              Called if ``foo`` doesn't implement ``__mul__``
-  ``l[idx] = 'bar'``                 ``__setitem__``           Index operation to set value
-  ``l.__sizeof__()``                 ``__sizeof__``            Bytes for internal representation
-  ``str(l)``                         ``__str__``               User friendly string
+  ``l + l2``                         ``__add__``               リストの結合 (``.extend`` を見よ)
+  ``"name" in l``                    ``__contains__``          要素がリストに含まれるかの確認
+  ``del l[idx]``                     ``__del__``               インデックス ``idx`` の要素を消去 (``.pop`` を見よ)
+  ``l == l2``                        ``__eq__``                2つのリストが等しい
+  ``"{}".format(l)``                 ``__format__``            リストの文字列書式化
+  ``l >= l2``                        ``__ge__``                大なりイコール。リストを左から比較
+  ``l[idx]``                         ``__getitem__``           インデックス操作
+  ``l > l2``                         ``__gt__``                大なり。リストを左から比較
+  No hash                            ``__hash__``              ``None`` をセットして辞書型に挿入できないようにしておく
+  ``l += l2``                        ``__iadd__``              ``l2`` を ``l`` に上書き追加
+  ``l *= 3``                         ``__imul__``              ``l`` の繰り返しを ``l`` に上書き
+  ``for thing in l:``                ``__iter__``              反復処理
+  ``l <= l2``                        ``__le__``                小なりイコール。リストを左から比較
+  ``len(l)``                         ``__len__``               リストの要素数
+  ``l < l2``                         ``__lt__``                小なり。リストを左から比較
+  ``l * 2``                          ``__mul__``               リストの繰り返し
+  ``l != l2``                        ``__ne__``                2つのリストが等しくない
+  ``repr(l)``                        ``__repr__``              プログラマにやさしい文字列表現
+  ``reversed(l)``                    ``__reversed__``          反転
+  ``foo * l``                        ``__rmul__``              ``foo`` が ``__mul__`` を実装していなかったら呼び出される
+
+  ``l[idx] = 'bar'``                 ``__setitem__``           値を設定するインデックス操作
+  ``l.__sizeof__()``                 ``__sizeof__``            内部表現のバイト数
+  ``str(l)``                         ``__str__``               ユーザにやさしい文字列表現
   ================================== ========================= ============================================================
 
 ..  longtable: format: {p{.4\textwidth} p{.55\textwidth}}
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1 }p{.4\textwidth} >{\hangindent=1em\hangafter=1 }p{.55\textwidth}}
 
-.. table:: List Methods
+.. table:: リストメソッド
   
-  ============================================================ ============================================================
-  Operation                                                    Result
-  ============================================================ ============================================================
-  ``l.append(item)``                                           Append ``item`` to end
-  ``l.clear()``                                                Empty list (mutates ``l``)
-  ``l.copy()``                                                 Shallow copy
-  ``l.count(thing)``                                           Number of occurrences of ``thing``
-  ``l.extend(l2)``                                             List concatenation (mutates ``l``)
-  ``l.index(thing)``                                           Index of ``thing`` else ``ValueError``
-  ``l.insert(idx, bar)``                                       Insert ``bar`` at index ``idx``
-  ``l.pop([idx])``                                             Remove last item or item at ``idx``
-  ``l.remove(bar)``                                            Remove first instance of ``bar`` else ``ValueError``
-  ``l.reverse()``                                              Reverse (mutates ``l``)
-  ``l.sort([key=], reverse=False)``                            In-place sort, by optional ``key`` function (mutates ``l``)
-  ============================================================ ============================================================
+  ============================================================ ======================================================================
+  操作                                                         結果
+  ============================================================ ======================================================================
+  ``l.append(item)``                                           ``item`` を末端に追加する
+  ``l.clear()``                                                リストを空にする (``l`` を更新)
+  ``l.copy()``                                                 浅いコピー
+  ``l.count(thing)``                                           ``thing`` の現れる回数をカウント
+  ``l.extend(l2)``                                             リストの結合 (``l`` を更新)
+  ``l.index(thing)``                                           ``thing`` のインデックス番号を返し、なければ ``ValueError`` を送出する
+  ``l.insert(idx, bar)``                                       インデックス ``idx`` に ``bar`` を挿入
+  ``l.pop([idx])``                                             インデックス ``idx`` か指定されていなければ最後の要素を削除する
+  ``l.remove(bar)``                                            先頭から検索し最初に現われる ``bar`` を消去する。なければ ``ValueError`` を送出する
+  ``l.reverse()``                                              反転 (``l`` を更新)
+  ``l.sort([key=], reverse=False)``                            オプションで ``key`` 関数を指定してその場でソートする (``l`` を更新)
+  ============================================================ ======================================================================
 
 
 
-Dictionaries
---------------
+辞書
+----
 
-Dictionaries are mutable mappings of keys to values. Keys
-must be hashable, but values can be any object::
+辞書は変更可能なキーと値のマッピングです。キーはハッシュ可能である必要がありますが、値はどのようなオブジェクトでも構いません::
 
   >>> instruments = {'Paul': 'Bass',
   ...                'John': 'Guitar'}
@@ -494,22 +495,22 @@ must be hashable, but values can be any object::
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.25\textwidth} l >{\hangindent=1em\hangafter=1\raggedright\arraybackslash }p{.35\textwidth}}
 
-.. table:: Magic Dictionary Methods
+.. table:: 辞書の特殊メソッド
   
   ======================================= ========================= ============================================================
-  Operation                               Provided By               Result
+  操作                                    提供するメソッド          結果
   ======================================= ========================= ============================================================
-  ``key in d``                            ``__contains__``          Membership
-  ``del d[key]``                          ``__delitem__``           Delete key
-  ``d == d2``                             ``__eq__``                Equality. Dicts are equal or not equal
-  ``"{}".format(d)``                      ``__format__``            String format of dict
-  ``d[key]``                              ``__getitem__``           Get value for ``key`` (see ``.get``)
-  ``for key in d:``                       ``__iter__``              Iteration over keys
-  ``len(d)``                              ``__len__``               Length
-  ``d != d2``                             ``__ne__``                Not equal
-  ``repr(d)``                             ``__repr__``              Programmer friendly string
-  ``d[key] = value``                      ``__setitem__``           Set ``value`` for ``key``
-  ``d.__sizeof__()``                      ``__sizeof__``            Bytes for internal representation
+  ``key in d``                            ``__contains__``          キーが辞書に含まれているか確認
+  ``del d[key]``                          ``__delitem__``           キーを削除
+  ``d == d2``                             ``__eq__``                2つの辞書が等しい
+  ``"{}".format(d)``                      ``__format__``            辞書の文字列書式化
+  ``d[key]``                              ``__getitem__``           キー ``key`` の値を取得 (``.get`` を見よ)
+  ``for key in d:``                       ``__iter__``              反復処理
+  ``len(d)``                              ``__len__``               辞書の要素数
+  ``d != d2``                             ``__ne__``                2つの辞書が等しくない
+  ``repr(d)``                             ``__repr__``              プログラマにやさしい文字列表現
+  ``d[key] = value``                      ``__setitem__``           キー ``key`` の値として ``value`` を格納する
+  ``d.__sizeof__()``                      ``__sizeof__``            内部表現のバイト数
   ======================================= ========================= ============================================================
 
 
@@ -517,23 +518,23 @@ must be hashable, but values can be any object::
 
 ..  longtable: format: {>{\hangindent=1em\hangafter=1 }p{.3\textwidth} >{\hangindent=1em\hangafter=1 }p{.6\textwidth}}
 
-.. table:: Dictionary Methods
+.. table:: 辞書のメソッド
   
 
   ================================================================= ============================================================
-  Operation                                                         Result
+  操作                                                              結果
   ================================================================= ============================================================
-  ``d.clear()``                                                     Remove all items (mutates ``d``)
-  ``d.copy()``                                                      Shallow copy
-  ``d.fromkeys(iter, value=None)``                                  Create dict from iterable with values set to value
-  ``d.get(key, [default])``                                         Get value for ``key`` or return default (``None``)
-  ``d.items()``                                                     View of (key, value) pairs
-  ``d.keys()``                                                      View of keys
-  ``d.pop(key, [default])``                                         Return value for key or default (``KeyError`` if not set)
-  ``d.popitem()``                                                   Return arbitrary (key, value) tuple. ``KeyError`` if empty
-  ``d.setdefault(k,   [default])``                                  Does ``d.get(k, default)``. If ``k`` missing, sets to default
-  ``d.update(d2)``                                                  Mutate ``d`` with values of ``d2`` (dictionary or iterable of (key, value) pairs)
-  ``d.values()``                                                    View of values
+  ``d.clear()``                                                     全ての要素を消去 (``d`` を更新)
+  ``d.copy()``                                                      浅いコピー
+  ``d.fromkeys(iter, value=None)``                                  イテラブルの要素をキーに辞書を生成。値は ``value`` に設定される
+  ``d.get(key, [default])``                                         キーが ``key`` の要素を取り出すか、なければ ``default`` (指定しなければ ``None``)を返す
+  ``d.items()``                                                     キーと値のペアのビューオブジェクトを返す
+  ``d.keys()``                                                      キーのビューオブジェクトを返す
+  ``d.pop(key, [default])``                                         キーが ``key`` の要素を辞書から抜き出して返す。なければ ``default`` を返すか、それも指定しなければ ``KeyError`` を送出する
+  ``d.popitem()``                                                   任意のキーと値のペアを返すか、空であれば ``KeyError`` を送出する
+  ``d.setdefault(k,   [default])``                                  ``d.get(k, default)`` と同様の動作だが、 ``k`` が無い場合は ``default`` (指定しなければ ``None``)を設定する
+  ``d.update(d2)``                                                  ``d`` を ``d2`` の値で更新する
+  ``d.values()``                                                    値のビューオブジェクトを返す
   ================================================================= ============================================================
 
 
